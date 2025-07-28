@@ -19,6 +19,11 @@ jobs:
         with:
           update: true
           msystem: UCRT64
+      - name: sanitize inputs
+        env:
+          ATUIN_TAG: ${{ inputs.atuin_tag }}
+        run: |
+          [[ "${ATUIN_TAG}" == ${ATUIN_TAG//[^0-9\.v]} ]] || exit 1
       - run: pacman --noconfirm -Syu mingw-w64-ucrt-x86_64-rust mingw-w64-ucrt-x86_64-protobuf # protobuf is needed by atuin
       - uses: Swatinem/rust-cache@v2
       - run: pwd
