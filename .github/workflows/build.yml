@@ -1,9 +1,12 @@
-name: Build Atuin
+name: Release Atuin
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: '0 0 * * 0'  # This runs the workflow every Sunday at midnight UTC
+    inputs:
+      atuin_tag:
+        description: "Atuin release tag to build (e.g., 18.3.0)"
+        required: true
+        type: string
 defaults:
   run:
     shell: msys2 {0}
@@ -17,16 +20,15 @@ jobs:
           update: true
           msystem: UCRT64
       - run: pacman --noconfirm -Syu mingw-w64-ucrt-x86_64-rust mingw-w64-ucrt-x86_64-protobuf # protobuf is needed by atuin
-      - uses: Swatinem/rust-cache@v2  
-      - run: cargo install atuin 
+      - uses: Swatinem/rust-cache@v2
+      - run: ./fetch_and_build.sh
+        env:
+          ATUIN_TAG: ${{ inputs.atuin_tag }}
       - name: Create Release
-        if: github.event_name == 'workflow_dispatch' || github.event_name == 'schedule'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          VERSION=$(atuin --version | cut -d' ' -f2)
-          TAG="v${VERSION}-$(date +%Y%m%d)"
-          gh release create "$TAG" \
-            --title "Atuin $VERSION" \
-            --notes "Automated build of Atuin $VERSION for Windows" \
-            C:/Users/runneradmin/.cargo/bin/atuin.exe
+          gh release create "v${ATUIN_TAG}" \
+            --title "Atuin $ATUIN_TAG" \
+            --notes "Automated build of Atuin $ATUIN_TAG for Windows" \
+            $ATUIN_RELEASE_BIN_PATH
