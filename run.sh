@@ -14,6 +14,7 @@ cmd__prep() {
   msg "Checking requirements"
   command -v gh >/dev/null 2>&1 || die "gh missing"
   command -v cargo >/dev/null 2>&1 || die "cargo missing"
+  command -v sha256sum >/dev/null 2>&1 || die "sha256sum missing"
   
   msg "Creating temp dir"
   tempdir="$(mktemp -d)"
@@ -31,7 +32,7 @@ cmd__fetch() {
   gh release download "v${ATUIN_TAG}" --repo atuinsh/atuin --pattern "source.tar.gz" --pattern "source.tar.gz.sha256"
 
   msg "Verifying checksum"
-  sha256 -c source.tar.gz < source.tar.gz.sha256
+  sha256sum -c source.tar.gz < source.tar.gz.sha256
 
   msg "Writing sources path to ATUIN_SOURCES_PATH"
   echo "ATUIN_SOURCES_PATH=${ATUIN_WORKDIR}/source.tar.gz" >> "${GITHUB_ENV}"
