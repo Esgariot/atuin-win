@@ -1,1 +1,1 @@
-Check out [the actions page.](https://github.com/Magniquick/atuin-win/actions)
+Windows distribution of [atuin](https://atuin.sh/) built using [msys2 UCRT](https://www.msys2.org/docs/environments/)
