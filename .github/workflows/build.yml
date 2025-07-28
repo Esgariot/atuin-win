@@ -34,6 +34,7 @@ jobs:
       - run: ./run.sh fetch
         env:
           ATUIN_TAG: ${{ inputs.atuin_tag }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - run: ./run.sh build
         env:
           ATUIN_TAG: ${{ inputs.atuin_tag }}
