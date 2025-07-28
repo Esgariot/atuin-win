@@ -32,7 +32,7 @@ cmd__fetch() {
   gh release download "v${ATUIN_TAG}" --repo atuinsh/atuin --pattern "source.tar.gz" --pattern "source.tar.gz.sha256"
 
   msg "Verifying checksum"
-  sha256sum -c source.tar.gz < source.tar.gz.sha256
+  sha256sum -c source.tar.gz.sha256
 
   msg "Writing sources path to ATUIN_SOURCES_PATH"
   echo "ATUIN_SOURCES_PATH=${ATUIN_WORKDIR}/source.tar.gz" >> "${GITHUB_ENV}"
