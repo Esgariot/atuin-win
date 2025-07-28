@@ -12,8 +12,6 @@ die() {
 
 cmd__prep() {
   msg "Checking requirements"
-
-  gh --version # DEBUG
   command -v gh >/dev/null 2>&1 || die "gh missing"
   command -v cargo >/dev/null 2>&1 || die "cargo missing"
   
