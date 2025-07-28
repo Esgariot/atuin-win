@@ -19,6 +19,7 @@ jobs:
         with:
           update: true
           msystem: UCRT64
+          path-type: inherit
       - name: sanitize inputs
         env:
           ATUIN_TAG: ${{ inputs.atuin_tag }}
