@@ -19,8 +19,14 @@ jobs:
       - run: pacman --noconfirm -Syu mingw-w64-ucrt-x86_64-rust mingw-w64-ucrt-x86_64-protobuf # protobuf is needed by atuin
       - uses: Swatinem/rust-cache@v2  
       - run: cargo install atuin 
-      - name: 'Upload Artifact'
-        uses: actions/upload-artifact@v4
-        with:
-          name: atuin
-          path: C:\Users\runneradmin\.cargo\bin\atuin.exe
+      - name: Create Release
+        if: github.event_name == 'workflow_dispatch' || github.event_name == 'schedule'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          VERSION=$(atuin --version | cut -d' ' -f2)
+          TAG="v${VERSION}-$(date +%Y%m%d)"
+          gh release create "$TAG" \
+            --title "Atuin $VERSION" \
+            --notes "Automated build of Atuin $VERSION for Windows" \
+            C:/Users/runneradmin/.cargo/bin/atuin.exe
