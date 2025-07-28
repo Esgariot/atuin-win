@@ -26,7 +26,7 @@ jobs:
           [[ "${ATUIN_TAG}" == ${ATUIN_TAG//[^0-9\.v]} ]] || exit 1
       - run: pacman --noconfirm -Syu mingw-w64-ucrt-x86_64-rust mingw-w64-ucrt-x86_64-protobuf # protobuf is needed by atuin
       - uses: Swatinem/rust-cache@v2
-      - run: pwd; ls -la
+      - uses: actions/checkout@v4
       - run: ./run.sh prep
         env:
           ATUIN_TAG: ${{ inputs.atuin_tag }}
