@@ -26,15 +26,17 @@ jobs:
           [[ "${ATUIN_TAG}" == ${ATUIN_TAG//[^0-9\.v]} ]] || exit 1
       - run: pacman --noconfirm -Syu mingw-w64-ucrt-x86_64-rust mingw-w64-ucrt-x86_64-protobuf # protobuf is needed by atuin
       - uses: Swatinem/rust-cache@v2
-      - run: pwd
-      - run: ./fetch_and_build.sh
+      - run: pwd; ls -la
+      - run: ./run.sh prep
         env:
           ATUIN_TAG: ${{ inputs.atuin_tag }}
-      - name: Create Release
+      - run: ./run.sh fetch
         env:
+          ATUIN_TAG: ${{ inputs.atuin_tag }}
+      - run: ./run.sh build
+        env:
+          ATUIN_TAG: ${{ inputs.atuin_tag }}
+      - run: ./run.sh publish
+        env:
+          ATUIN_TAG: ${{ inputs.atuin_tag }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          gh release create "v${ATUIN_TAG}" \
-            --title "Atuin $ATUIN_TAG" \
-            --notes "Automated build of Atuin $ATUIN_TAG for Windows" \
-            $ATUIN_RELEASE_BIN_PATH
