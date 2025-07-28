@@ -54,6 +54,11 @@ cmd__build() {
   msg "Writing target binary path to ATUIN_TARGET_BIN_PATH"
   echo "ATUIN_TARGET_BIN_PATH=${ATUIN_WORKDIR}/atuin-${ATUIN_TAG}/target/release/atuin.exe" >>"${GITHUB_ENV}"
 
+  msg "Generating checksum"
+  cd "${ATUIN_WORKDIR}/atuin-${ATUIN_TAG}/target/release"
+  sha256sum atuin.exe > atuin.exe.sha256
+  echo "ATUIN_CHECKSUM_PATH=${ATUIN_WORKDIR}/atuin-${ATUIN_TAG}/target/release/atuin.exe.sha256" >>"${GITHUB_ENV}"
+
   msg "Done"
 }
 
@@ -64,7 +69,8 @@ cmd__publish() {
   gh release create "v${ATUIN_TAG}" \
     --title "Atuin ${ATUIN_TAG}" \
     --notes "Automated build of Atuin $ATUIN_TAG for Windows" \
-    "${ATUIN_TARGET_BIN_PATH}"
+    "${ATUIN_TARGET_BIN_PATH}" \
+    "${ATUIN_CHECKSUM_PATH}"
 
   msg "Done"
 }
