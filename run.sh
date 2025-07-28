@@ -15,14 +15,14 @@ cmd__prep() {
   command -v gh >/dev/null 2>&1 || die "gh missing"
   command -v cargo >/dev/null 2>&1 || die "cargo missing"
   command -v sha256sum >/dev/null 2>&1 || die "sha256sum missing"
-  
+
   msg "Creating temp dir"
   tempdir="$(mktemp -d)"
   cd "$tempdir"
 
   msg "Writing workdir path to ATUIN_WORKDIR"
   echo "ATUIN_WORKDIR=${tempdir}" >> "${GITHUB_ENV}"
-  
+
   msg "Done"
 }
 cmd__fetch() {
@@ -59,7 +59,6 @@ cmd__build() {
 
 
 cmd__publish() {
-  cd "${ATUIN_WORKDIR}"
 
   msg "Creating new release"
   gh release create "v${ATUIN_TAG}" \
