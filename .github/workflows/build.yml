@@ -21,6 +21,7 @@ jobs:
           msystem: UCRT64
       - run: pacman --noconfirm -Syu mingw-w64-ucrt-x86_64-rust mingw-w64-ucrt-x86_64-protobuf # protobuf is needed by atuin
       - uses: Swatinem/rust-cache@v2
+      - run: pwd
       - run: ./fetch_and_build.sh
         env:
           ATUIN_TAG: ${{ inputs.atuin_tag }}
